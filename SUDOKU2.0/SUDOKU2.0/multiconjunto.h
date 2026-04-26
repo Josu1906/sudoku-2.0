@@ -30,7 +30,7 @@ public:
 
 	int dame_num_elems() const;
 
-	bool pertenece(int v);
+	bool pertenece(int v) const;
 
 	bool insertar(int v);
 

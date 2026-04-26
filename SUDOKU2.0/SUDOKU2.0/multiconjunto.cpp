@@ -18,7 +18,7 @@ int MultiConjunto::dame_num_elems() const {
 
 }
 
-bool MultiConjunto::pertenece(int v) {
+bool MultiConjunto::pertenece(int v) const{
 
 	int dim = dame_num_elems();
 	int i = 0;

@@ -24,7 +24,7 @@ const string GOLD = "\033[93m"; // Dorado para estrellas
 
 
 void title() {
-    cout << BLUE;
+    cout << YELLOW;
     cout << "  ____  _   _  ____   ___  _  __ _   _" << endl;
     cout << " / ___|| | | ||  _ \\ / _ \\| |/ /| | | |" << endl;
     cout << " \\___ \\| | | || | | | | | | ' / | | | |" << endl;
@@ -48,6 +48,8 @@ void visualizar(const ReglasSudoku& sudoku) {
     int dim_raiz = sqrt(dim);
 
     cout << endl;
+
+    cout << sudoku.dame_ID() << endl;
 
     cout << "     ";
 
@@ -320,6 +322,7 @@ int main() {
         string aux_str;
         char op;
         int index = 0;
+        bool chosen = false;
         ReglasSudoku sudoku_play;
         ReglasSudoku* sudoku;
         bool insert = false;
@@ -356,7 +359,6 @@ int main() {
 
         system("CLS");
 
-        title();
 
 
         archivo2.open("lista_partidas.txt");
@@ -404,51 +406,64 @@ int main() {
             archivo2.close();
         }
 
-        cout << "Partida nueva (N), continuar partida(C) o abandonar la aplicacion(A) ? ";
-        cin >> op;
+        while (!chosen) {
 
-        if (op == 'N') {
-            lista_originales.mostrar_lista();
-            cout << "Elige un sudoku: ";
-            cin >> index;
-            insert = true;
-            if (index != -1) sudoku_play = lista_originales.dame_sudoku(index - 1);
-            else salir = true;
-        }
-        else if (op == 'C') {
-            if (lista_partidas.dame_num_elems() > 0) {
-                lista_partidas.mostrar_lista();
-                cout << "Elige un sudoku: ";
-                cin >> index;
-                if (index != -1) sudoku_play = lista_partidas.dame_sudoku(index - 1);
-                else salir = true;
-            }
-            else {
-                cout << "No hay partidas empezadas. Elige una partida nueva:" << endl;
+            title();
+            cout << "Partida nueva (N), continuar partida(C) o abandonar la aplicacion(A) ? ";
+            cin >> op;
+
+            if (op == 'N') {
                 lista_originales.mostrar_lista();
                 cout << "Elige un sudoku: ";
                 cin >> index;
                 insert = true;
-                sudoku_play = lista_originales.dame_sudoku(index - 1);
+                if (index != -1) sudoku_play = lista_originales.dame_sudoku(index - 1);
+                else salir = true;
+            }
+            else if (op == 'C') {
+                if (lista_partidas.dame_num_elems() > 0) {
+                    lista_partidas.mostrar_lista();
+                    cout << "Elige un sudoku: ";
+                    cin >> index;
+                    if (index != -1) sudoku_play = lista_partidas.dame_sudoku(index - 1);
+                    else salir = true;
+                }
+                else {
+                    cout << "No hay partidas empezadas. Elige una partida nueva:" << endl;
+                    lista_originales.mostrar_lista();
+                    cout << "Elige un sudoku: ";
+                    cin >> index;
+                    insert = true;
+                    sudoku_play = lista_originales.dame_sudoku(index - 1);
+                }
+            }
+        
+            cout << "1. Ver un sudoku." << endl;
+            cout << "2. Jugar un sudoku." << endl;
+            cout << "Elige una opcion: ";
+            cin >> op;
+            if (op == '1') {
+                visualizar(sudoku_play);
+                cout << endl << "1. Ver otro sudoku." << endl;
+                cout << "2. Jugar este sudoku." << endl;
+                cout << "Elige una opcion: ";
+                cin >> op;
+                if (op == '2') {
+                    chosen = true;
+                }
+                else{
+                    system("CLS");
+                }
             }
         }
-        
-        cout << "1. Ver un sudoku." << endl;
-        cout << "2. Jugar un sudoku." << endl;
-        cout << "Elige una opcion: ";
-        cin >> op;
 
-        if (op == '1') {
-            visualizar(sudoku_play);
-            cin.ignore();
-            cin.get();
-        }
-        else {
+        
 
 
             system("CLS");
 
 
+            title();
 
             cout << "DO YOU WANNA RESTART THE CONSOLE COMPLETELY EVERYTIME IT UPDATES (IF YOU SAY YES, YOU WONT BE ABLE TO VIEW YOUR SUDOKU HISTORY)?" << endl;
             cout << "Y OR N: ";
@@ -658,7 +673,6 @@ int main() {
 
 
             }
-        }
 
         cout << endl;
         //Globos y Estrellas a los lados del mensaje principal
@@ -689,18 +703,26 @@ int main() {
                     fDelete(sudoku_play, archivo_salida, num_sudokus, archivo, aux_char);
                     lista_partidas.eliminar(index - 1);
                 }
+                cout << "DO YOU WANNA PLAY ANOTHER SUDOKU?" << endl;
+                cout << "Y OR N: ";
+                cin >> hr;
+
+
+                if (toupper(hr) != 'Y') am = false;
+            }
+            else {
+                system("CLS");
+                cout << "DO YOU WANNA PLAY ANOTHER SUDOKU?" << endl;
+                cout << "Y OR N: ";
+                cin >> hr;
+
+
+                if (toupper(hr) != 'Y') am = false;
             }
 
-            system("CLS");
 
         
 
-        cout << "DO YOU WANNA PLAY ANOTHER SUDOKU?" << endl;
-        cout << "Y OR N: ";
-        cin >> hr;
-
-
-        if (toupper(hr) != 'Y') am = false;
     }
 
     return 0;

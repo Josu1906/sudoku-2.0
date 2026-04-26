@@ -14,7 +14,7 @@ tCelda::tCelda(int v) {
 	this->estado = OCUPADA;
 }
 
-bool tCelda::es_vacia() {
+bool tCelda::es_vacia() const {
 	bool salida = false;
 	if (estado == VACIA) {
 		salida = true;
@@ -23,7 +23,7 @@ bool tCelda::es_vacia() {
 	return salida;
 }
 
-bool tCelda::es_original() {
+bool tCelda::es_original() const{
 	bool salida = false;
 	if (estado == ORIGINAL) {
 		salida = true;
@@ -32,7 +32,7 @@ bool tCelda::es_original() {
 	return salida;
 }
 
-bool tCelda::es_ocupada() {
+bool tCelda::es_ocupada() const{
 	bool salida = false;
 	if (estado == OCUPADA) {
 		salida = true;
@@ -58,7 +58,7 @@ void tCelda::set_vacia() {
 	estado = VACIA;
 }
 
-int tCelda::dame_valor() {
+int tCelda::dame_valor() const{
 
 	return v;
 }

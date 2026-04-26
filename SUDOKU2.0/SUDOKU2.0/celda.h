@@ -18,10 +18,10 @@ public:
 	/* métodos de consulta */
 
 
-	bool es_vacia();
-	bool es_original();
-	bool es_ocupada();
-	int dame_valor();
+	bool es_vacia() const;
+	bool es_original() const;
+	bool es_ocupada() const;
+	int dame_valor() const;
 	/* métodos modificadores*/
 	void set_valor(int v);
 	void set_ocupada();
