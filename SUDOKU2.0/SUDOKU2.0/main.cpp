@@ -289,7 +289,9 @@ void resolver_sudoku(ReglasSudoku& sudoku) {
 
     if (!sudoku.terminado()) {
         sudoku.autocompletar();
-        resolver_sudoku(sudoku);
+        if (sudoku.dame_num_celdas_bloqueadas() == 0) {
+            resolver_sudoku(sudoku);
+        }
     }
 
 }
@@ -597,7 +599,7 @@ int main() {
                             
                                 if (insert) {
                                 
-                                    while (j < lista_partidas.dame_num_elems()) {
+                                    while (j < lista_partidas.dame_num_elems() && !is_repeat) {
                                         if (sudoku_play.dame_ID() == lista_partidas.dame_sudoku(j).dame_ID()) {
                                             is_repeat = true;
                                         }
@@ -658,10 +660,12 @@ int main() {
             }
         }
 
-        system("CLS");
         cout << endl;
         //Globos y Estrellas a los lados del mensaje principal
             if (!salir &&  sudoku_play.terminado()) {
+                cin.ignore();
+                cin.get(op);
+                system("CLS");
                 cout << RED << "  _  " << GOLD << " * " << RED << "_                                       _  " << GOLD << " * " << RED << "_  " << endl;
                 cout << RED << " ( )   ( )      " << GREEN << " ##   ##  ######  ##   ##     " << RED << " ( )   ( ) " << endl;
                 cout << RED << "  |  " << GOLD << " * " << RED << "|       " << GREEN << "  ## ##  ##    ## ##   ##     " << RED << "  |  " << GOLD << " * " << RED << "|  " << endl;
@@ -687,7 +691,7 @@ int main() {
                 }
             }
 
-        cout << endl;
+            system("CLS");
 
         
 
@@ -698,12 +702,6 @@ int main() {
 
         if (toupper(hr) != 'Y') am = false;
     }
-
-    
-
-
-
-
 
     return 0;
 }

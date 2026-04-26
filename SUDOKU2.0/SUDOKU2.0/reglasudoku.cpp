@@ -779,7 +779,7 @@ bool operator==(const ReglasSudoku& s1, const ReglasSudoku& s2) {
 
 		while (son_iguales && j < dimension) {
 
-			if (s1.dame_celda(i, j).dame_valor() != s1.dame_celda(i, j).dame_valor()) {
+			if (s1.dame_celda(i, j).dame_valor() != s2.dame_celda(i, j).dame_valor()) {
 
 				son_iguales = false;
 

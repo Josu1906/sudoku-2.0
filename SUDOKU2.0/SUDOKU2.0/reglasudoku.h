@@ -67,11 +67,11 @@ public:
 
 		pos_bloqueadas.cont = 0;
 
-		for (int i = 0; i < ((DIM_MAX * DIM_MAX) / 2); i++) {
+		/*for (int i = 0; i < ((DIM_MAX * DIM_MAX) / 2); i++) {
 			this->pos_bloqueadas.lista_de_bloqueados[i] = new tPosBloqueada();
 			this->pos_bloqueadas.lista_de_bloqueados[i]->f = 0;
 			this->pos_bloqueadas.lista_de_bloqueados[i]->c = 0;
-		}
+		}*/
 	}
 
 
