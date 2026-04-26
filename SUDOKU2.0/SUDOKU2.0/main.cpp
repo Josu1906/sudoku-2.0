@@ -139,10 +139,10 @@ void block(ReglasSudoku& sudoku) {
     for (int i = 0; i < n; i++) {
         sudoku.dame_celda_bloqueada(i, f, c);
 
-        cout << DRED << " (" << (f + 1) << ", " << (c + 1) << ") " << RESET;
+        cout << RED << " (" << (f + 1) << ", " << (c + 1) << ") ";
     }
 
-    cout << endl;
+    cout << RESET << endl;
 
 }
 
@@ -298,6 +298,54 @@ void resolver_sudoku(ReglasSudoku& sudoku) {
 
 }
 
+void opciones2(ListaSudoku& lista, ReglasSudoku& sudoku, int& index, bool& insert, char& op, bool& chosen) {
+
+    bool out = false;
+
+    while (!out) {
+
+        lista.mostrar_lista();
+        cout << "Elige un sudoku (-1 para voler): ";
+        cin >> index;
+        insert = true;
+        if (index != -1) sudoku = lista.dame_sudoku(index - 1);
+        else out = true;
+
+        if (!out) {
+
+            cout << endl;
+
+
+            cout << "1. Ver el sudoku." << endl;
+            cout << "2. Jugar el sudoku " << sudoku.dame_ID() << "." << endl;
+            cout << "3. Voler." << endl;
+            cout << "Elige una opcion: ";
+            cin >> op;
+            if (op == '1') {
+                visualizar(sudoku);
+                cout << endl << "1. Ver otro sudoku." << endl;
+                cout << "2. Jugar el sudoku " << sudoku.dame_ID() << "." << endl;
+                cout << "Elige una opcion: ";
+                cin >> op;
+                if (op == '2') {
+                    chosen = true;
+                    out = true;
+                }
+            }
+            else if (op == '2') {
+                chosen = true;
+                out = true;
+            }
+            else {
+                out = true;
+            }
+            cout << endl;
+        }
+
+    }
+
+}
+
 int main() {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     bool am = true;
@@ -406,59 +454,30 @@ int main() {
             archivo2.close();
         }
 
-        while (!chosen) {
+        while (!chosen && !salir) {
+            
+            system("CLS");
 
             title();
-            cout << "Partida nueva (N), continuar partida(C) o abandonar la aplicacion(A) ? ";
+            cout << "Partida nueva (N), continuar partida(C) o abandonar la aplicacion(A)? ";
             cin >> op;
 
             if (op == 'N') {
-                lista_originales.mostrar_lista();
-                cout << "Elige un sudoku: ";
-                cin >> index;
-                insert = true;
-                if (index != -1) sudoku_play = lista_originales.dame_sudoku(index - 1);
-                else salir = true;
+                opciones2(lista_originales, sudoku_play, index, insert, op, chosen);
+
             }
             else if (op == 'C') {
-                if (lista_partidas.dame_num_elems() > 0) {
-                    lista_partidas.mostrar_lista();
-                    cout << "Elige un sudoku: ";
-                    cin >> index;
-                    if (index != -1) sudoku_play = lista_partidas.dame_sudoku(index - 1);
-                    else salir = true;
-                }
-                else {
-                    cout << "No hay partidas empezadas. Elige una partida nueva:" << endl;
-                    lista_originales.mostrar_lista();
-                    cout << "Elige un sudoku: ";
-                    cin >> index;
-                    insert = true;
-                    sudoku_play = lista_originales.dame_sudoku(index - 1);
-                }
+                    if (lista_partidas.dame_num_elems() == 0) {
+                        cout << "No hay partidas empezadas. Elige una partida nueva:" << endl;
+                        opciones2(lista_originales, sudoku_play, index, insert, op, chosen);
+                    }
+                    else {
+                        opciones2(lista_partidas, sudoku_play, index, insert, op, chosen);
+                    }
             }
-        
-            cout << "1. Ver un sudoku." << endl;
-            cout << "2. Jugar un sudoku." << endl;
-            cout << "Elige una opcion: ";
-            cin >> op;
-            if (op == '1') {
-                visualizar(sudoku_play);
-                cout << endl << "1. Ver otro sudoku." << endl;
-                cout << "2. Jugar este sudoku." << endl;
-                cout << "Elige una opcion: ";
-                cin >> op;
-                if (op == '2') {
-                    chosen = true;
-                }
-                else{
-                    system("CLS");
-                }
-            }
+            else salir = true;
+            
         }
-
-        
-
 
             system("CLS");
 
@@ -503,7 +522,7 @@ int main() {
                         /*visualizar(sudoku, reset);
                         block(sudoku);*/
 
-                        cout << GREEN << "--> THE VALUE: " << RESET << v << GREEN << " WAS ADDED IT CORRECTLY IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << " )" << GREEN << " <--" << RESET << endl;
+                        cout << GREEN << "--> THE VALUE: " << RESET << v << GREEN << " WAS ADDED IT CORRECTLY IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << ")" << GREEN << " <--" << RESET << endl;
                         /*opciones();*/
                     }
 
@@ -514,7 +533,7 @@ int main() {
                         /*visualizar(sudoku, reset);
                         block(sudoku);*/
 
-                        cout << DRED << " --> ERROR: WE COULDNT ADD " << RESET << v << " IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << ")" << DRED << ".IT IS NOT POSSIBLE <-- " << RESET << endl;
+                        cout << DRED << " --> ERROR: WE COULDNT ADD " << RESET << v << " IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << ")" << DRED << ". IT IS NOT POSSIBLE <-- " << RESET << endl;
                         /*opciones();*/
                     }
 
@@ -568,13 +587,13 @@ int main() {
                         for (int i = 1; i <= sudoku_play.dame_dimension(); i++) {
                             if (sudoku_play.es_valor_posible(f, c, i)) {
                                 addit += 1;
-                                cout << i << " ";
+                                cout << GREEN << i << " ";
                             }
                         }
                         if (addit == 0) {
                             cout << RED << " NONE" << RESET << endl;
                         }
-                        cout << endl;
+                        cout << RESET << endl;
 
                     }
                     else {
@@ -712,6 +731,21 @@ int main() {
             }
             else {
                 system("CLS");
+                cout << YELLOW;
+                cout << "          ###########          " << endl;
+                cout << "       #################       " << endl;
+                cout << "     #####################     " << endl;
+                cout << "   #######   #####   #######   " << endl;
+                cout << "  ########   #####   ########  " << endl;
+                cout << "  ########   #####   ########  " << endl;
+                cout << "  ###########################  " << endl;
+                cout << "  #####                 #####  " << endl;
+                cout << "   ######             ######   " << endl;
+                cout << "     ########       ########   " << endl;
+                cout << "       #################       " << endl;
+                cout << "          ###########          " << endl;
+                cout << RESET << endl;
+                cout << endl;
                 cout << "DO YOU WANNA PLAY ANOTHER SUDOKU?" << endl;
                 cout << "Y OR N: ";
                 cin >> hr;
