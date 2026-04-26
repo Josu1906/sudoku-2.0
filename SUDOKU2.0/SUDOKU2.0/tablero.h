@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int DIM_MAX = 20;
+const int DIM_MAX = 10;
 
 class Tablero {
 
@@ -20,7 +20,7 @@ public:
 		dim = dimm;
 	}
 
-	int dimension();
-	tCelda get_celda(int f, int c);
+	int dimension() const;
+	tCelda get_celda(int f, int c) const;
 	bool set_valor(int f, int c, int v, string estado);
 };

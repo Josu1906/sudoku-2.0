@@ -28,7 +28,7 @@ public:
 		}
 	}
 
-	int dame_num_elems();
+	int dame_num_elems() const;
 
 	bool pertenece(int v);
 

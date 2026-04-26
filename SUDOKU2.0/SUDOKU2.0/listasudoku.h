@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
 #include "reglasudoku.h"
+#include <thread>
+#include <chrono>
+#include "colors.h"
+#include <string>
 
 using namespace std;
 
@@ -16,6 +20,7 @@ public:
 
 	ListaSudoku() {
 		size = 0;
+		lista = new ReglasSudoku*[capacity];
 	}
 
 	ReglasSudoku& operator[](int indice);

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int Tablero::dimension() {
+int Tablero::dimension() const {
 
 	return this->dim;
 }
@@ -31,7 +31,7 @@ bool Tablero::set_valor(int f, int c, int v, string estado) {
 	return asignado;
 }
 
-tCelda Tablero::get_celda(int f, int c) {
+tCelda Tablero::get_celda(int f, int c) const {
 
 	return this->tablero[f][c];
 }

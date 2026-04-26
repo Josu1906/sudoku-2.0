@@ -3,8 +3,7 @@
 
 using namespace std;
 
-
-int MultiConjunto::dame_num_elems() {
+int MultiConjunto::dame_num_elems() const {
 
 	int i = 0;
 
@@ -12,6 +11,8 @@ int MultiConjunto::dame_num_elems() {
 		//cout << " elemento: " << lista[i].v << " posicin: " << i << endl;
 		i++;
 	}
+
+	//if (i > 9) cout << "ALERTA";
 
 	return i;
 
@@ -61,7 +62,6 @@ bool MultiConjunto::insertar(int v){
 	}
 	return insertado;
 }
-
 
 bool MultiConjunto::eliminar(int v) {
 	int dim = dame_num_elems();

@@ -8,12 +8,51 @@
 
 using namespace std;
 
-int ReglasSudoku::dame_dimension() {
+ReglasSudoku::ReglasSudoku(const ReglasSudoku& otro) {
 
-	return this->tablero.dimension();
+	this->cont = otro.cont;
+
+	this->ID_SUDOKU = otro.dame_ID();
+	this->info_valores_no_validos = otro.info_valores_no_validos;
+	this->tablero = otro.tablero;
+
+	// 3. Copiar la lista de posiciones bloqueadas
+	this->pos_bloqueadas.cont = otro.pos_bloqueadas.cont;
+
+	for (int i = 0; i < otro.pos_bloqueadas.cont; i++) {
+		this->pos_bloqueadas.lista_de_bloqueados[i] = new tPosBloqueada(*otro.pos_bloqueadas.lista_de_bloqueados[i]);
+	}
+
+	
 }
 
-tCelda ReglasSudoku::dame_celda(int f, int c) {
+ReglasSudoku::~ReglasSudoku() {
+
+	// 3. Copiar la lista de posiciones bloqueadas
+
+	for (int i = 0; i < this->pos_bloqueadas.cont; i++) {
+		delete this->pos_bloqueadas.lista_de_bloqueados[i];
+		this->pos_bloqueadas.lista_de_bloqueados[i] = nullptr;
+	}
+
+
+}
+
+
+string ReglasSudoku::dame_ID() const {
+	return this->ID_SUDOKU;
+}
+
+void ReglasSudoku::set_ID(string id) {
+	this->ID_SUDOKU = id;
+}
+
+int ReglasSudoku::dame_dimension() const {
+
+	return tablero.dimension();
+}
+
+tCelda ReglasSudoku::dame_celda(int f, int c) const {
 
 	return this->tablero.get_celda(f, c);
 }
@@ -48,8 +87,8 @@ int ReglasSudoku::dame_num_celdas_bloqueadas() {
 
 tCelda ReglasSudoku::dame_celda_bloqueada(int p, int& f, int& c) {
 
-	f = this->pos_bloqueadas.lista_de_bloqueados[p].f;
-	c = this->pos_bloqueadas.lista_de_bloqueados[p].c;
+	f = this->pos_bloqueadas.lista_de_bloqueados[p]->f;
+	c = this->pos_bloqueadas.lista_de_bloqueados[p]->c;
 
 	return this->tablero.get_celda(f, c);
 }
@@ -188,6 +227,16 @@ bool ReglasSudoku::pon_valor(int f, int c, int v) {
 					info_valores_no_validos.no_validos[nf][nc].insertar(v);
 
 
+
+					if (this->tablero.get_celda(nf, nc).es_vacia()) { // se comprueba si esta bloqueada solo si la celda es vacia
+						block(nf, nc);
+					}
+
+					int alert = contBloq(nf, nc);
+					if (alert > 9) cout << "ALERTA" <<endl;
+
+
+
 					nc += dir_x[i];
 					nf += dir_y[i];
 				}
@@ -204,6 +253,11 @@ bool ReglasSudoku::pon_valor(int f, int c, int v) {
 				//cout << "i: " << i << "j: " << j << endl;
 				info_valores_no_validos.no_validos[i][j].insertar(v);
 
+
+				if (this->tablero.get_celda(i, j).es_vacia()) { // se comprueba si esta bloqueada solo si la celda es vacia
+					block(i, j);
+				}
+
 				j++;
 			}
 
@@ -214,41 +268,41 @@ bool ReglasSudoku::pon_valor(int f, int c, int v) {
 
 		// tras la actualizacion se procede a ver cuales celdas se encuentran bloqueadas tras añadir ese valor. se hace el analisis para todas las celdas vacias que se encuentren en la vertical, horizontal y la cuadricula de la celda
 
-		int dir_x[4] = { 1, 0, -1, 0 };
-		int dir_y[4] = { 0, 1, 0, -1 };
+		//int dir_x[4] = { 1, 0, -1, 0 };
+		//int dir_y[4] = { 0, 1, 0, -1 };
 
-		for (int i = 0; i < 4; i++) { // se procede a hacer un analisis de las filas y columnas para ver si hay alguna bloqueada por ese valor
+		//for (int i = 0; i < 4; i++) { // se procede a hacer un analisis de las filas y columnas para ver si hay alguna bloqueada por ese valor
 
-			int nf = f + dir_x[i];
-			int nc = c + dir_y[i];
+		//	int nf = f + dir_x[i];
+		//	int nc = c + dir_y[i];
 
-			while (nf >= 0 && nf < dimension && nc >= 0 && nc < dimension) {
+		//	while (nf >= 0 && nf < dimension && nc >= 0 && nc < dimension) {
 
-				if (this->tablero.get_celda(nf, nc).es_vacia()) { // se comprueba si esta bloqueada solo si la celda es vacia
-					block(nf, nc);
-				}
+		//		if (this->tablero.get_celda(nf, nc).es_vacia()) { // se comprueba si esta bloqueada solo si la celda es vacia
+		//			block(nf, nc);
+		//		}
 
-				nf += dir_x[i];
-				nc += dir_y[i];
-			}
-		}
+		//		nf += dir_x[i];
+		//		nc += dir_y[i];
+		//	}
+		//}
 
-		i = lf;
+		//i = lf;
 
-		while ((i >= lf) && (i < (lf + raiz_perfecta))) { // el mismo proceso que se hizo para la fila y la columna, se hace para la cuadricula
+		//while ((i >= lf) && (i < (lf + raiz_perfecta))) { // el mismo proceso que se hizo para la fila y la columna, se hace para la cuadricula
 
-			int j = lc;
-			while ((j >= lc) && (j < (lc + raiz_perfecta))) {
+		//	int j = lc;
+		//	while ((j >= lc) && (j < (lc + raiz_perfecta))) {
 
-				if (this->tablero.get_celda(i, j).es_vacia()) {
-					block(i, j);
-				}
+		//		if (this->tablero.get_celda(i, j).es_vacia()) {
+		//			block(i, j);
+		//		}
 
-				j++;
-			}
+		//		j++;
+		//	}
 
-			i++;
-		}
+		//	i++;
+		//}
 
 	}
 
@@ -265,7 +319,7 @@ void ReglasSudoku::block(int nf, int nc) {
 
 	while (p < this->pos_bloqueadas.cont && !block_repetido) { // primero para ver si hay celdas bloqueadas, se empieza analizando si la celda en que se esta ya pertenece a la lista de bloquedas
 
-		if (this->pos_bloqueadas.lista_de_bloqueados[p].f == nf && this->pos_bloqueadas.lista_de_bloqueados[p].c == nc) {
+		if (this->pos_bloqueadas.lista_de_bloqueados[p]->f == nf && this->pos_bloqueadas.lista_de_bloqueados[p]->c == nc) {
 			block_repetido = true;
 		}
 		p++;
@@ -274,17 +328,20 @@ void ReglasSudoku::block(int nf, int nc) {
 
 		//cout << "fila: " << nf << " columna: " << nc << " nro elem: " << this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() << endl;
 
-		if (this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() == dimension) { // sera una celda bloqueada si los valores no valudos son todos los posibles
+		if (contBloq(nf, nc) == dimension) { // sera una celda bloqueada si los valores no valudos son todos los posibles
 				//cout << "blocked" << endl;
-				this->pos_bloqueadas.lista_de_bloqueados[this->pos_bloqueadas.cont].f = nf;
-				this->pos_bloqueadas.lista_de_bloqueados[this->pos_bloqueadas.cont].c = nc;
+				this->pos_bloqueadas.lista_de_bloqueados[this->pos_bloqueadas.cont] = new tPosBloqueada();
+				this->pos_bloqueadas.lista_de_bloqueados[this->pos_bloqueadas.cont]->f = nf;
+				this->pos_bloqueadas.lista_de_bloqueados[this->pos_bloqueadas.cont]->c = nc;
 				this->pos_bloqueadas.cont += 1;
 		}
 	}
 
 }
 
-int ReglasSudoku::contBloq(int f, int c) { 
+int ReglasSudoku::contBloq(int f, int c) const { 
+
+	//cout << this->info_valores_no_validos.no_validos[f][c].dame_num_elems() << endl;
 
 	return this->info_valores_no_validos.no_validos[f][c].dame_num_elems();
 }
@@ -296,22 +353,19 @@ void ReglasSudoku::unlock(int nf, int nc) { // lo que hace el desbloqueo, es ana
 	if (this->tablero.get_celda(nf, nc).es_vacia()) {
 		while (k < dame_num_celdas_bloqueadas()) { // se procede a hacer una busqueda entre las celdas bloqueadas para ver si coincide con alguna que este vacia
 
-			if (this->pos_bloqueadas.lista_de_bloqueados[k].f == nf && this->pos_bloqueadas.lista_de_bloqueados[k].c == nc) {
+			if (this->pos_bloqueadas.lista_de_bloqueados[k]->f == nf && this->pos_bloqueadas.lista_de_bloqueados[k]->c == nc) {
 				//cout << "celda bloqueada: " << nf << " " << nc << endl;
 				
 				//cout << "mapeo: " << this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() << endl;
 				
 				if (this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() < this->tablero.dimension()) { // si hay un espacio liberado dentro de los valores no validos, de desbloqueda
+					delete this->pos_bloqueadas.lista_de_bloqueados[k];
 
-
-					for (int n = k; k < (dame_num_celdas_bloqueadas() - 1); n++) { // se hace el reordenamiento
-						this->pos_bloqueadas.lista_de_bloqueados[n].f = this->pos_bloqueadas.lista_de_bloqueados[n + 1].f;
-						this->pos_bloqueadas.lista_de_bloqueados[n].c = this->pos_bloqueadas.lista_de_bloqueados[n + 1].c;
+					for (int n = k; k < (dame_num_celdas_bloqueadas() - 1); n++) { // se hace el reordenamiento			
+						this->pos_bloqueadas.lista_de_bloqueados[n] = this->pos_bloqueadas.lista_de_bloqueados[n + 1];
 					}
 
-					this->pos_bloqueadas.lista_de_bloqueados[(dame_num_celdas_bloqueadas() - 1)].f = 0;
-					this->pos_bloqueadas.lista_de_bloqueados[(dame_num_celdas_bloqueadas() - 1)].c = 0;
-
+					this->pos_bloqueadas.lista_de_bloqueados[(dame_num_celdas_bloqueadas() - 1)] = nullptr;
 					this->pos_bloqueadas.cont -= 1;
 
 				}
@@ -368,6 +422,8 @@ bool ReglasSudoku::quita_valor(int f, int c) {
 					//cout << "nf: " << nf << " nc: " << nc << endl;
 					info_valores_no_validos.no_validos[nf][nc].eliminar(v);
 
+					unlock(nf, nc);
+
 
 					nc += dir_x[i];
 					nf += dir_y[i];
@@ -386,60 +442,63 @@ bool ReglasSudoku::quita_valor(int f, int c) {
 				//cout << "i: " << i << " j: " << j << endl;
 				info_valores_no_validos.no_validos[i][j].eliminar(v);
 
-				j++;
-			}
-
-			i++;
-			// //cout << endl;
-		}
-
-
-
-		for (int i = 0; i < 2; i++) { // se procede hacer el analisis de desbloqueo para la fiila, la columna y posteriormente la cuadricula
-
-			int nf = f * dir_x[i];
-			int nc = c * dir_y[i];
-
-
-			while (nf >= 0 && nf < dimension && nc >= 0 && nc < dimension) {
-
-				if (nf >= lf && (nf < (lf + raiz_perfecta)) && dir_x[i] == 0) {
-					nf += raiz_perfecta;
-				}
-				else if (nc >= lc && (nc < (lc + raiz_perfecta)) && dir_y[i] == 0) {
-					nc += raiz_perfecta;
-				}
-				else {
-					//cout << "valor: " << v << endl;
-
-					unlock(nf, nc);
-				
-					nc += dir_x[i];
-					nf += dir_y[i];
-				}
-
-
-
-			}
-		}
-
-		i = lf;
-
-		while ((i >= lf) && (i < (lf + raiz_perfecta))) { // una vez culminado ese tramo, se procede a analizar los valores que afectan a la celda en la cuadricula
-			int j = lc;
-			while ((j >= lc) && (j < (lc + raiz_perfecta))) {
-
-		 //primero para ver si el valor es posible hay que analizar los valores a su alrededor para calcular la multiplicidad de sus apariciones
-				//cout << "valor: " << v << endl;
-
 				unlock(i, j);
 
+
 				j++;
 			}
 
 			i++;
 			// //cout << endl;
 		}
+
+
+
+		//for (int i = 0; i < 2; i++) { // se procede hacer el analisis de desbloqueo para la fiila, la columna y posteriormente la cuadricula
+
+		//	int nf = f * dir_x[i];
+		//	int nc = c * dir_y[i];
+
+
+		//	while (nf >= 0 && nf < dimension && nc >= 0 && nc < dimension) {
+
+		//		if (nf >= lf && (nf < (lf + raiz_perfecta)) && dir_x[i] == 0) {
+		//			nf += raiz_perfecta;
+		//		}
+		//		else if (nc >= lc && (nc < (lc + raiz_perfecta)) && dir_y[i] == 0) {
+		//			nc += raiz_perfecta;
+		//		}
+		//		else {
+		//			//cout << "valor: " << v << endl;
+
+		//			unlock(nf, nc);
+		//		
+		//			nc += dir_x[i];
+		//			nf += dir_y[i];
+		//		}
+
+
+
+		//	}
+		//}
+
+		//i = lf;
+
+		//while ((i >= lf) && (i < (lf + raiz_perfecta))) { // una vez culminado ese tramo, se procede a analizar los valores que afectan a la celda en la cuadricula
+		//	int j = lc;
+		//	while ((j >= lc) && (j < (lc + raiz_perfecta))) {
+
+		// //primero para ver si el valor es posible hay que analizar los valores a su alrededor para calcular la multiplicidad de sus apariciones
+		//		//cout << "valor: " << v << endl;
+
+		//		unlock(i, j);
+
+		//		j++;
+		//	}
+
+		//	i++;
+		//	// //cout << endl;
+		//}
 	}	
 
 	return deleit;
@@ -483,7 +542,7 @@ void ReglasSudoku::autocompletar() {
 
 }
 
-bool ReglasSudoku::carga_sudoku(ifstream& archivo, string arch) {
+bool ReglasSudoku::carga_sudoku(ifstream& archivo, string file_name) {
 
 	bool done = false;
 	int dim = 0;
@@ -495,7 +554,7 @@ bool ReglasSudoku::carga_sudoku(ifstream& archivo, string arch) {
 	int raiz_perfecta = sqrt(dimension);
 
 
-	archivo.open(arch);
+	archivo.open(file_name);
 	if (archivo.is_open()) {
 
 		archivo >> dim;
@@ -504,6 +563,8 @@ bool ReglasSudoku::carga_sudoku(ifstream& archivo, string arch) {
 
 
 		this->tablero = Tablero(dim);
+		this->info_valores_no_validos.nColumnas = dim;
+		this->info_valores_no_validos.nFilas = dim;
 		int dimension = this->tablero.dimension();
 
 		//cout << "Dimension del sudoku: " << dimension << "x" << dimension << endl;
@@ -594,8 +655,20 @@ void ReglasSudoku::reset() {
 	int dim = this->tablero.dimension();
 	int dir_x[2] = { 1, 0 };
 	int dir_y[2] = { 0, 1 };
-
+	
 	for (int i = 0; i < dim; i++) {
+		for (int j = 0; j < dim; j++) {
+		
+			if (this->tablero.get_celda(i, j).es_ocupada()) {
+
+				quita_valor(i, j);
+
+			}
+		
+		}
+	}
+
+	/*for (int i = 0; i < dim; i++) {
 		for (int j = 0; j < dim; j++) {
 			if (this->tablero.get_celda(i, j).es_ocupada()) {
 				this->tablero.set_valor(i, j, 0, "VACIO");
@@ -608,36 +681,59 @@ void ReglasSudoku::reset() {
 	for (int i = 0; i < this->pos_bloqueadas.cont; i++) {
 		this->pos_bloqueadas.lista_de_bloqueados[i].f = 0;
 		this->pos_bloqueadas.lista_de_bloqueados[i].c = 0;
-	}
+	}*/
 
 
 
-	for (int i = 0; i < dim; i++) {
-		for (int j = 0; j < dim; j++) {
-		
-			if (this->tablero.get_celda(i, j).es_ocupada()) {
-
-				quita_valor(i, j);
-
-			}
-		
-		}
-	}
 }
 
-//ReglasSudoku& ReglasSudoku::operator=(const ReglasSudoku& sudoku) {
-//	if (this != &sudoku) { // evita autoasignación
-//		/* se libera la memoria ocupada por this*/
-//		delete lista;
-//		lista[i] = new ReglasSudoku(sudoku);
-//	}
-//	return *this;
-//}
+ReglasSudoku& ReglasSudoku::operator=(const ReglasSudoku& sudoku) {
+	if (this != &sudoku) { 
 
-bool operator<=(ReglasSudoku s1, ReglasSudoku s2) {
+		this->cont = sudoku.cont;
 
-	bool menor = true;
+		this->ID_SUDOKU = sudoku.dame_ID();
+		this->info_valores_no_validos = sudoku.info_valores_no_validos;
+		this->tablero = sudoku.tablero;
 
+		/* se libera la memoria ocupada por this*/
+		for (int i = 0; i < this->pos_bloqueadas.cont; i++) {
+			delete this->pos_bloqueadas.lista_de_bloqueados[i];
+			this->pos_bloqueadas.lista_de_bloqueados[i] = nullptr;
+		}
+
+		this->pos_bloqueadas.cont = sudoku.pos_bloqueadas.cont;
+
+		for (int i = 0; i < sudoku.pos_bloqueadas.cont; i++) {
+			this->pos_bloqueadas.lista_de_bloqueados[i] = new tPosBloqueada(*sudoku.pos_bloqueadas.lista_de_bloqueados[i]);
+		}
+	}
+	return *this;
+}
+
+int num_Celda(int k,const ReglasSudoku& sudoku1) {
+	int dimension = sudoku1.dame_dimension();
+	int apariciones = 0;
+
+	for (int i = 0; i < dimension; i++) {
+		for (int j = 0; j < dimension; j++) {
+			if (sudoku1.dame_celda(i, j).es_vacia()) {
+				int q = sudoku1.contBloq(i, j);
+				if (k == (9 - q)) {
+					apariciones++;
+				}
+			}
+		}
+	}
+
+	return apariciones;
+
+	
+}
+
+bool operator<(const ReglasSudoku& s1, const ReglasSudoku& s2) {
+
+	bool menor = false;
 	int dimension = s1.dame_dimension();
 	int cont1 = 0, cont2 = 0;
 
@@ -655,82 +751,50 @@ bool operator<=(ReglasSudoku s1, ReglasSudoku s2) {
 	if (cont1 < cont2) {
 		menor = true;
 	}
+
 	else if (cont1 == cont2) {
-		int kcont1 = 0;
-		int kcont2 = 0;
 		int k = 0;
-		while (kcont1 != 0 && kcont2 != 0 && k <= 9) {
-			kcont1 = num_Celda(k, s1);
-			kcont1 = num_Celda(k, s2);
+		while ((!menor) && k <= 9) {
+
+			if ((num_Celda(k, s1) <= num_Celda(k, s2))) {
+				if (num_Celda(k+1, s1) > num_Celda(k+1, s2)) {
+					menor = true;
+				}
+			}
+
 			k++;
-		}
-		if (kcont1 > kcont2 || ((kcont2 > kcont1) && (kcont1 == 0)) || (kcont1 == kcont2)) {
-			menor = true;
-		}
-		else {
-			menor = false;
 		}
 	}
 
 	return menor;
 }
 
-//bool operator==(ReglasSudoku s1, ReglasSudoku s2) {
-//	
-//	bool son_iguales = true;
-//	int i = 0, j = 0;
-//	int dimension = s1.dame_dimension();
-//
-//	while (son_iguales && i < dimension) {
-//
-//		while (son_iguales && j < dimension) {
-//
-//			if (s1.dame_celda(i, j).dame_valor() != s1.dame_celda(i, j).dame_valor()) {
-//
-//				son_iguales = false;
-//
-//			}
-//
-//			j++;
-//		}
-//
-//		i++;
-//	}
-//
+bool operator==(const ReglasSudoku& s1, const ReglasSudoku& s2) {
+
+	bool son_iguales = true;
+	int i = 0, j = 0;
+	int dimension = s1.dame_dimension();
+
+	while (son_iguales && i < dimension) {
+
+		while (son_iguales && j < dimension) {
+
+			if (s1.dame_celda(i, j).dame_valor() != s1.dame_celda(i, j).dame_valor()) {
+
+				son_iguales = false;
+
+			}
+
+			j++;
+		}
+
+		i++;
+	}
+
+	return son_iguales;
+}
+
 //	return son_iguales;
 //}
 
-int num_Celda(int k, ReglasSudoku sudoku1) {
-	int dimension = sudoku1.dame_dimension();
-	int apariciones = 0;
-
-	for (int i = 0; i < dimension; i++) {
-		for (int j = 0; j < dimension; j++) {
-			int q = sudoku1.contBloq(i, j);
-			if (k == (9 - q)) {
-				apariciones++;
-			}
-		}
-	}
-
-	return apariciones;
-
-	
-	/*for (int i = 0; i < dimension; i++) {
-			for (int j = 0; j < dimension; j++) {
-				
-				for (int q = 1; q <= dimension; q++) {
-					if (sudoku1.es_valor_posible(i, j, q)) {
-						cont++;
-					}
-				}
-
-				if (k == cont) {
-					apariciones++;
-				}
-				cont = 0;
-				
-			}
-	}*/
-}
 

@@ -132,10 +132,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="celda.h" />
+    <ClInclude Include="checkML.h" />
+    <ClInclude Include="colors.h" />
     <ClInclude Include="listasudoku.h" />
     <ClInclude Include="multiconjunto.h" />
     <ClInclude Include="reglasudoku.h" />
     <ClInclude Include="tablero.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lista_partidas.txt" />
+    <Text Include="lista_sudokus.txt" />
+    <Text Include="ord.txt" />
+    <Text Include="sudoku_0.txt" />
+    <Text Include="sudoku_1.txt" />
+    <Text Include="sudoku_2.txt" />
+    <Text Include="sudoku_3.txt" />
+    <Text Include="sudoku_4.txt" />
+    <Text Include="sudoku_5.txt" />
+    <Text Include="sudoku_6.txt" />
+    <Text Include="sudoku_7.txt" />
+    <Text Include="sudoku_8.txt" />
+    <Text Include="sudoku_9.txt" />
+    <Text Include="temp.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

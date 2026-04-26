@@ -50,5 +50,53 @@
     <ClInclude Include="listasudoku.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="checkML.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="colors.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="lista_partidas.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="lista_sudokus.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_0.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_1.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_2.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_3.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_4.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_5.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_6.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_7.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_8.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="sudoku_9.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="temp.txt">
+      <Filter>Archivos de recursos</Filter>
+    </Text>
+    <Text Include="ord.txt" />
   </ItemGroup>
 </Project>

@@ -1,21 +1,3 @@
-﻿  celda.cpp
-  listasudoku.cpp
-  main.cpp
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.h(42,7): error C2804: el operador binario '<' tiene demasiados parámetros
-  (compilando archivo de origen "listasudoku.cpp")
-  
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\listasudoku.cpp(20,14): error C2676: '<' binario: 'const ReglasSudoku' no define este operador o una conversión a un tipo aceptable para el operador predefinido
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.h(42,7): error C2804: el operador binario '<' tiene demasiados parámetros
-  (compilando archivo de origen "main.cpp")
-  
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\main.cpp(46,18): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-  multiconjunto.cpp
-  reglasudoku.cpp
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.h(42,7): error C2804: el operador binario '<' tiene demasiados parámetros
-  (compilando archivo de origen "reglasudoku.cpp")
-  
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.cpp(156,20): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.cpp(339,20): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-C:\Users\Josué Gonzalez\Desktop\Examen\SUDOKU2.0\SUDOKU2.0\reglasudoku.cpp(495,20): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-  tablero.cpp
-  Generando código...
+﻿  main.cpp
+C:\Users\Josué Gonzalez\Downloads\sudoku-2.0-main\SUDOKU2.0\SUDOKU2.0\main.cpp(48,18): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+  SUDOKU2.0.vcxproj -> C:\Users\Josué Gonzalez\Downloads\sudoku-2.0-main\SUDOKU2.0\x64\Debug\SUDOKU2.0.exe
