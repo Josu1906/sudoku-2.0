@@ -1,9 +1,6 @@
 #include "listasudoku.h"
 #include "reglasudoku.h"
 
-
-
-
 int ListaSudoku::dame_num_elems() {
 
 	return size;
@@ -160,7 +157,6 @@ void ListaSudoku::mostrar_lista() {
 		int dim = lista[i]->dame_dimension();
 		for (int j = 0; j < dim; j++) {
 			sudokus[j] = num_Celda(j+1, *lista[i]);
-			//cout << sudokus[j] << endl;
 		}
 
 		n_vacias[i] = celdas_vacias(dim, *lista[i]);
@@ -190,18 +186,6 @@ ListaSudoku::~ListaSudoku() {
 	capacity = 0;
 }
 
-
 ReglasSudoku& ListaSudoku::operator[](int indice) {
 	return *lista[indice];
 }
-
-
-
-//ReglasSudoku& ListaSudoku::operator=(const ReglasSudoku& sudoku) {
-//	if (this != &sudoku) { // evita autoasignación
-//		/* se libera la memoria ocupada por this*/
-//		delete lista;
-//		lista[i] = new ReglasSudoku(sudoku);
-//	}
-//	return *this;
-//}

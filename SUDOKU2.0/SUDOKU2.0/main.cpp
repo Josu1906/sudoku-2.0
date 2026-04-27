@@ -12,15 +12,14 @@
 #include "listasudoku.h"
 
 using namespace std;
-
+const string GOLD = "\033[93m"; // Dorado para estrellas
+//const string RED = "\033[91m"; // Rojo para globos
 // Códigos ANSI para los colores
 //const string ORANGE = "\033[38;5;208m"; // Naranja brillante
 //const string RESET = "\033[0m";         // Volver al color original
 //const string GREEN   = "\x1b[32m";
 //const string DRED = "\x1b[31m";
 //const string BLUE = "\033[94m";
-const string GOLD = "\033[93m"; // Dorado para estrellas
-//const string RED = "\033[91m"; // Rojo para globos
 
 
 void title() {
@@ -133,7 +132,7 @@ void block(ReglasSudoku& sudoku) {
     cout << "Sudoku bloqueado... Las casillas son: ";
 
     if (n == 0) {
-        cout << DRED << "NONE" << RESET;
+        cout << RED << "NONE" << RESET;
     }
 
     for (int i = 0; i < n; i++) {
@@ -373,16 +372,6 @@ int main() {
         ReglasSudoku sudoku_play;
         ReglasSudoku* sudoku;
         bool insert = false;
-
-        /*archivo.open("ord.txt");
-        if (archivo.is_open()) {
-            int i = 0;
-            while ((aux_char != '-') && (i < 9)) {
-                archivo >> index_partida[i];
-                i++;
-            }
-            archivo.close();
-        }*/
         
         archivo.open("lista_sudokus.txt");
         if (archivo.is_open()) {
@@ -405,8 +394,6 @@ int main() {
         }
 
         system("CLS");
-
-
 
         archivo2.open("lista_partidas.txt");
         if (archivo2.is_open()) {
@@ -458,7 +445,7 @@ int main() {
             system("CLS");
 
             title();
-            cout << "Partida nueva (N), continuar partida(C) o abandonar la aplicacion(A)? ";
+            cout << "Partida nueva (N), continuar partida (C) o abandonar la aplicacion (A)? ";
             cin >> op;
 
             if (op == 'N') {
@@ -492,20 +479,18 @@ int main() {
                 cout << "Y OR N: ";
                 cin >> hr;
 
-
                 if (toupper(hr) == 'Y') r = true;
 
                 system("CLS");
 
                 title();
-
-    
                 visualizar(sudoku_play);
                 block(sudoku_play);
                 opciones();
 
 
         }
+        bool dont_save = false;
         while (!sudoku_play.terminado() && !salir) {
                 int f = 0, c = 0, v = 0;
                 int dim = sudoku_play.dame_dimension();
@@ -525,25 +510,14 @@ int main() {
                     if (sudoku_play.pon_valor(f, c, v)) {
                         cout << endl;
                         reset(r);
-                        /*visualizar(sudoku, reset);
-                        block(sudoku);*/
-
                         cout << GREEN << "--> THE VALUE: " << RESET << v << GREEN << " WAS ADDED IT CORRECTLY IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << ")" << GREEN << " <--" << RESET << endl;
-                        /*opciones();*/
                     }
 
                     else {
                         cout << endl;
                         reset(r);
-
-                        /*visualizar(sudoku, reset);
-                        block(sudoku);*/
-
                         cout << DRED << " --> ERROR: WE COULDNT ADD " << RESET << v << " IN " << RESET << "(" << (f + 1) << ", " << (c + 1) << ")" << DRED << ". IT IS NOT POSSIBLE <-- " << RESET << endl;
-                        /*opciones();*/
                     }
-
-
                     break;
                 case 2:
                     cout << "/n Fila y columna entre 1 ... 9: ";
@@ -555,16 +529,12 @@ int main() {
                     if (sudoku_play.quita_valor(f, c)) {
                         cout << endl;
                         reset(r);
-                        /*visualizar(sudoku, reset);
-                        block(sudoku);*/
                         cout << GREEN << "--> DELETED IT CORRECTLY <--" << RESET << endl;
                     }
 
                     else {
                         cout << endl;
                         reset(r);
-                        /*visualizar(sudoku, reset);
-                        block(sudoku);*/
                         cout << DRED << "--> IT CANNOT BE DELETED <-- " << RESET << endl;
                     }
 
@@ -574,8 +544,6 @@ int main() {
                     sudoku_play.reset();
                     cout << endl;
                     reset(r);
-                    /*visualizar(sudoku, reset);
-                    opciones();*/
                     break;
                 case 4:
                     cout << "/n Fila y columna entre 1 ... 9: ";
@@ -607,16 +575,11 @@ int main() {
                     }
 
                     addit = 0;
-
-                    /*opciones();*/
-
                     break;
 
                 case 5:
                     sudoku_play.autocompletar();
                     reset(r);
-                    /*block(sudoku);
-                    opciones();*/
                     break;
                 case 6: 
                     resolver_sudoku(sudoku_play);
@@ -666,7 +629,7 @@ int main() {
                     }
                     else {
                         if (!insert) {
-                            cout << "DO YOU WANNA DELETE ALL THE PROGRESS OF THE GAME " << sudoku_play.dame_ID() << "? ";
+                            cout << "DO YOU WANNA DELETE ALL THE PROGRESS OF THE GAME " << sudoku_play.dame_ID() << "? Y or N: ";
                             cin >> save;
 
                             if (save == 'Y') {
@@ -682,10 +645,18 @@ int main() {
                                     archivo.close();
                                 }
                             }
+                            else {
+                                dont_save = true;
+                            }
+                        }
+                        else {
+                            dont_save = true;
                         }
                     }
-                    remove("lista_partidas.txt");
-                    rename("temp.txt", "lista_partidas.txt");
+                    if (!dont_save) {
+                        remove("lista_partidas.txt");
+                        rename("temp.txt", "lista_partidas.txt");
+                    }
                     break;
                 default:
                     reset(r);
@@ -700,11 +671,11 @@ int main() {
             }
 
         cout << endl;
-        //Globos y Estrellas a los lados del mensaje principal
             if (!salir &&  sudoku_play.terminado()) {
                 cin.ignore();
                 cin.get(op);
                 system("CLS");
+                  //Globos y Estrellas a los lados del mensaje principal
                 cout << RED << "  _  " << GOLD << " * " << RED << "_                                       _  " << GOLD << " * " << RED << "_  " << endl;
                 cout << RED << " ( )   ( )      " << GREEN << " ##   ##  ######  ##   ##     " << RED << " ( )   ( ) " << endl;
                 cout << RED << "  |  " << GOLD << " * " << RED << "|       " << GREEN << "  ## ##  ##    ## ##   ##     " << RED << "  |  " << GOLD << " * " << RED << "|  " << endl;
@@ -759,9 +730,6 @@ int main() {
 
                 if (toupper(hr) != 'Y') am = false;
             }
-
-
-        
 
     }
 

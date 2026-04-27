@@ -53,12 +53,6 @@ public:
 
 
 		pos_bloqueadas.cont = 0;
-
-		/*for (int i = 0; i < ((DIM_MAX * DIM_MAX) / 2); i++) {
-			this->pos_bloqueadas.lista_de_bloqueados[i] = new tPosBloqueada();
-			this->pos_bloqueadas.lista_de_bloqueados[i]->f = 0;
-			this->pos_bloqueadas.lista_de_bloqueados[i]->c = 0;
-		}*/
 	}
 
 	ReglasSudoku() {
@@ -106,4 +100,3 @@ public:
 bool operator<(const ReglasSudoku& s1, const ReglasSudoku& s2);
 bool operator==(const ReglasSudoku& s1, const ReglasSudoku& s2);
 int num_Celda(int k, const ReglasSudoku& sudoku1);
-//ReglasSudoku& operator=(const ReglasSudoku& sudoku);
