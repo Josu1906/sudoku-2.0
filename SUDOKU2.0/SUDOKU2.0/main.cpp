@@ -307,7 +307,6 @@ void opciones2(ListaSudoku& lista, ReglasSudoku& sudoku, int& index, bool& inser
         lista.mostrar_lista();
         cout << "Elige un sudoku (-1 para voler): ";
         cin >> index;
-        insert = true;
         if (index != -1) sudoku = lista.dame_sudoku(index - 1);
         else out = true;
 
@@ -464,7 +463,9 @@ int main() {
 
             if (op == 'N') {
                 opciones2(lista_originales, sudoku_play, index, insert, op, chosen);
-
+                if (chosen) {
+                    insert = true;
+                }
             }
             else if (op == 'C') {
                     if (lista_partidas.dame_num_elems() == 0) {
@@ -475,36 +476,41 @@ int main() {
                         opciones2(lista_partidas, sudoku_play, index, insert, op, chosen);
                     }
             }
-            else salir = true;
+            else {
+                salir = true;
+                am = false;
+            } 
             
         }
 
-            system("CLS");
+        system("CLS");
+
+        if (!salir) {
+                title();
+
+                cout << "DO YOU WANNA RESTART THE CONSOLE COMPLETELY EVERYTIME IT UPDATES (IF YOU SAY YES, YOU WONT BE ABLE TO VIEW YOUR SUDOKU HISTORY)?" << endl;
+                cout << "Y OR N: ";
+                cin >> hr;
 
 
-            title();
+                if (toupper(hr) == 'Y') r = true;
 
-            cout << "DO YOU WANNA RESTART THE CONSOLE COMPLETELY EVERYTIME IT UPDATES (IF YOU SAY YES, YOU WONT BE ABLE TO VIEW YOUR SUDOKU HISTORY)?" << endl;
-            cout << "Y OR N: ";
-            cin >> hr;
+                system("CLS");
 
+                title();
 
-            if (toupper(hr) == 'Y') r = true;
-
-            system("CLS");
-
-            title();
-
-            int f = 0, c = 0, v = 0;
-            int dim = sudoku_play.dame_dimension();
-            int addit = 0;
-            int j = 0;
     
-            visualizar(sudoku_play);
-            block(sudoku_play);
-            opciones();
+                visualizar(sudoku_play);
+                block(sudoku_play);
+                opciones();
 
-            while (!sudoku_play.terminado() && !salir) {
+
+        }
+        while (!sudoku_play.terminado() && !salir) {
+                int f = 0, c = 0, v = 0;
+                int dim = sudoku_play.dame_dimension();
+                int addit = 0;
+                int j = 0;
                 cin >> request;
 
                 switch (request) {
@@ -729,7 +735,7 @@ int main() {
 
                 if (toupper(hr) != 'Y') am = false;
             }
-            else {
+            else if (!salir) {
                 system("CLS");
                 cout << YELLOW;
                 cout << "          ###########          " << endl;

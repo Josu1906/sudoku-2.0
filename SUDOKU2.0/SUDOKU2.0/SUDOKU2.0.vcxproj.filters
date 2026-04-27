@@ -58,9 +58,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="lista_partidas.txt">
-      <Filter>Archivos de recursos</Filter>
-    </Text>
     <Text Include="lista_sudokus.txt">
       <Filter>Archivos de recursos</Filter>
     </Text>
@@ -98,5 +95,6 @@
       <Filter>Archivos de recursos</Filter>
     </Text>
     <Text Include="ord.txt" />
+    <Text Include="lista_partidas.txt" />
   </ItemGroup>
 </Project>
