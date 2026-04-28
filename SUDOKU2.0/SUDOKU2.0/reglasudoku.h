@@ -7,28 +7,29 @@
 
 using namespace std;
 
-typedef struct {
-	int f;
-	int c;
-} tPosBloqueada;
-
-//typedef tPosBloqueada tListaBloqueadas[(DIM_MAX * DIM_MAX)];
-
-typedef struct {
-	int cont;
-	tPosBloqueada* lista_de_bloqueados[(DIM_MAX * DIM_MAX) / 2];
-} tBloqueada;
-
-typedef struct {
-	int nFilas;
-	int nColumnas;
-	MultiConjunto no_validos[DIM_MAX][DIM_MAX];
-} tValores_invalidos;
 
 
 class ReglasSudoku {
 
 private:
+	typedef struct {
+		int f;
+		int c;
+	} tPosBloqueada;
+
+	//typedef tPosBloqueada tListaBloqueadas[(DIM_MAX * DIM_MAX)];
+
+	typedef struct {
+		int cont;
+		tPosBloqueada* lista_de_bloqueados[(DIM_MAX * DIM_MAX) / 2];
+	} tBloqueada;
+
+	typedef struct {
+		int nFilas;
+		int nColumnas;
+		MultiConjunto no_validos[DIM_MAX][DIM_MAX];
+	} tValores_invalidos;
+
 	int cont;
 	Tablero tablero = Tablero(9);
 	tBloqueada pos_bloqueadas;
@@ -75,6 +76,7 @@ public:
 	
 	/* consultoras */
 	int dame_dimension() const;
+	int dame_contador();
 	tCelda dame_celda(int f, int c) const;
 	bool terminado();
 	bool bloqueo();

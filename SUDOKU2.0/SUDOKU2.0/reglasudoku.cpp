@@ -68,6 +68,10 @@ bool ReglasSudoku::terminado() {
 	return done;
 }
 
+int ReglasSudoku::dame_contador() {
+	return this->cont;
+}
+
 bool ReglasSudoku::bloqueo() {
 
 	bool blocked = false;
@@ -163,8 +167,6 @@ bool ReglasSudoku::pon_valor(int f, int c, int v) {
 						block(nf, nc);
 					}
 
-					int alert = contBloq(nf, nc);
-					if (alert > 9) cout << "ALERTA" <<endl;
 
 
 
@@ -229,8 +231,6 @@ void ReglasSudoku::block(int nf, int nc) {
 
 int ReglasSudoku::contBloq(int f, int c) const { 
 
-	//cout << this->info_valores_no_validos.no_validos[f][c].dame_num_elems() << endl;
-
 	return this->info_valores_no_validos.no_validos[f][c].dame_num_elems();
 }
 
@@ -242,10 +242,7 @@ void ReglasSudoku::unlock(int nf, int nc) { // lo que hace el desbloqueo, es ana
 		while (k < dame_num_celdas_bloqueadas()) { // se procede a hacer una busqueda entre las celdas bloqueadas para ver si coincide con alguna que este vacia
 
 			if (this->pos_bloqueadas.lista_de_bloqueados[k]->f == nf && this->pos_bloqueadas.lista_de_bloqueados[k]->c == nc) {
-				//cout << "celda bloqueada: " << nf << " " << nc << endl;
-				
-				//cout << "mapeo: " << this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() << endl;
-				
+								
 				if (this->info_valores_no_validos.no_validos[nf][nc].dame_num_elems() < this->tablero.dimension()) { // si hay un espacio liberado dentro de los valores no validos, de desbloqueda
 					delete this->pos_bloqueadas.lista_de_bloqueados[k];
 

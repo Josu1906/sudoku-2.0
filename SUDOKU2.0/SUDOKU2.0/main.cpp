@@ -12,6 +12,7 @@
 #include "listasudoku.h"
 
 using namespace std;
+
 const string GOLD = "\033[93m"; // Dorado para estrellas
 //const string RED = "\033[91m"; // Rojo para globos
 // Códigos ANSI para los colores
@@ -20,7 +21,6 @@ const string GOLD = "\033[93m"; // Dorado para estrellas
 //const string GREEN   = "\x1b[32m";
 //const string DRED = "\x1b[31m";
 //const string BLUE = "\033[94m";
-
 
 void title() {
     cout << YELLOW;
@@ -286,12 +286,14 @@ void fDelete(ReglasSudoku& sudoku, ofstream& arch, int num_sudokus, ifstream& in
 
 }
 
-void resolver_sudoku(ReglasSudoku& sudoku) {
+void resolver_sudoku(ReglasSudoku& sudoku, int& cont) {
 
     if (!sudoku.terminado()) {
+        int contador2 = cont;
         sudoku.autocompletar();
-        if (sudoku.dame_num_celdas_bloqueadas() == 0) {
-            resolver_sudoku(sudoku);
+        if (sudoku.dame_num_celdas_bloqueadas() == 0 && contador2 < sudoku.dame_contador()) {
+            contador2 = sudoku.dame_contador();
+            resolver_sudoku(sudoku, contador2);
         }
     }
 
@@ -342,6 +344,55 @@ void opciones2(ListaSudoku& lista, ReglasSudoku& sudoku, int& index, bool& inser
 
     }
 
+}
+
+void cargar_sudokus_empezadas(ifstream& archivo2, int& num_sudokus, string& id, ListaSudoku& lista_originales, ListaSudoku& lista_partidas) {
+    archivo2.open("lista_partidas.txt");
+    if (archivo2.is_open()) {
+        archivo2 >> num_sudokus;
+        /*ReglasSudoku* sudoku;*/
+        ReglasSudoku sudoku;
+        char aux_char;
+        for (int i = 0; i < num_sudokus; i++) {
+            int cords[3] = { 0,0,0 };
+            archivo2 >> id;
+            int j = 0;
+            bool encontrado = false;
+            while (!encontrado && j < 9) {
+                if (id == lista_originales.dame_sudoku(j).dame_ID()) {
+                    encontrado = true;
+                    sudoku =  (lista_originales.dame_sudoku(j));
+                    //archivo >> aux_str;
+                    //archivo.ignore();
+                    archivo2.get(aux_char);
+                    archivo2.get(aux_char);
+
+                    while (aux_char != '-') {
+                        archivo2 >> cords[0];
+                        archivo2.get(aux_char);
+                        archivo2 >> cords[1];
+                        archivo2.get(aux_char);
+                        archivo2.get(aux_char);
+                        archivo2 >> cords[2];
+                        archivo2.ignore();
+                        archivo2.get(aux_char);
+
+                        sudoku.pon_valor(cords[0], cords[1], cords[2]);
+                        //cout << id << " (" << cords[0] << ", " << cords[1] << "). v: " << cords[2] << endl;
+                    }
+
+                    archivo2.get(aux_char);
+                    archivo2.ignore();
+
+                    lista_partidas.insertar(sudoku);
+                   // delete sudoku;
+                }
+                j++;
+            }
+
+        }
+        archivo2.close();
+    }
 }
 
 int main() {
@@ -395,50 +446,7 @@ int main() {
 
         system("CLS");
 
-        archivo2.open("lista_partidas.txt");
-        if (archivo2.is_open()) {
-            archivo2 >> num_sudokus;
-            /*ReglasSudoku* sudoku;*/
-            for (int i = 0; i < num_sudokus; i++) {
-                int cords[3] = { 0,0,0 };
-                archivo2 >> id;
-                int j = 0;
-                bool encontrado = false;
-                while (!encontrado && j < 9) {
-                    if(id == lista_originales.dame_sudoku(j).dame_ID()){
-                        encontrado = true;
-                        sudoku = new ReglasSudoku(lista_originales.dame_sudoku(j));
-                        //archivo >> aux_str;
-                        //archivo.ignore();
-                        archivo2.get(aux_char);
-                        archivo2.get(aux_char);
-
-                        while (aux_char != '-') {
-                            archivo2 >> cords[0];
-                            archivo2.get(aux_char);
-                            archivo2 >> cords[1];
-                            archivo2.get(aux_char);
-                            archivo2.get(aux_char);
-                            archivo2 >> cords[2];
-                            archivo2.ignore();
-                            archivo2.get(aux_char);
-
-                            sudoku->pon_valor(cords[0], cords[1], cords[2]);
-                            //cout << id << " (" << cords[0] << ", " << cords[1] << "). v: " << cords[2] << endl;
-                        }
-
-                        archivo2.get(aux_char);
-                        archivo2.ignore();
-
-                        lista_partidas.insertar(*sudoku);
-                        delete sudoku;
-                    }
-                    j++;
-                }
-
-            }
-            archivo2.close();
-        }
+        cargar_sudokus_empezadas(archivo2, num_sudokus, id, lista_originales, lista_partidas);
 
         while (!chosen && !salir) {
             
@@ -492,6 +500,7 @@ int main() {
         }
         bool dont_save = false;
         while (!sudoku_play.terminado() && !salir) {
+                int cont = 0;
                 int f = 0, c = 0, v = 0;
                 int dim = sudoku_play.dame_dimension();
                 int addit = 0;
@@ -582,7 +591,7 @@ int main() {
                     reset(r);
                     break;
                 case 6: 
-                    resolver_sudoku(sudoku_play);
+                    resolver_sudoku(sudoku_play, cont);
                     reset(r);
                     break;
                 case 7:
@@ -618,8 +627,6 @@ int main() {
                                     archivo_salida << (num_sudokus) << endl;
                                     update(sudoku_play, archivo_salida, num_sudokus, archivo, aux_char);
                                 }
-
-                           
 
                                 archivo_salida.close();
                             }
